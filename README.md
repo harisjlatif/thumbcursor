@@ -1,5 +1,7 @@
 # TouchCursor on MacOS
 
+NOTE: For better user experience and customizability, please use https://github.com/AlienKevin/touchcursor_karabiner
+
 Speed up text edits and navigations by using the space bar as a modifier key (while still letting you type spaces).
 
 ## Basics
