@@ -43,20 +43,32 @@ Inspired by Martin Stone's [TouchCursor for Windows](https://martin-stone.github
 
 ## Installation
 
-### Requirements
+### Option 1: Download a release
 
-- macOS 11 Big Sur or later
-- Xcode Command Line Tools: `xcode-select --install`
+Requires macOS 11 Big Sur or later.
 
-### Build and install
+1. Download the latest `Thumbcursor-<version>.zip` from [Releases](https://github.com/harisjlatif/thumbcursor/releases/latest) and unzip it.
+2. Run the install script in Terminal:
+
+   ```sh
+   cd ~/Downloads/Thumbcursor-*/
+   ./install.sh
+   ```
+
+The script copies `Thumbcursor.app` to `~/Applications` and registers a LaunchAgent so it starts at login.
+
+> [!NOTE]
+> Release builds are ad-hoc signed, not notarized by Apple. The install script clears the download quarantine flag so macOS will run the app.
+
+### Option 2: Build from source
+
+Requires macOS 11 or later and the Xcode Command Line Tools (`xcode-select --install`).
 
 ```sh
 git clone https://github.com/harisjlatif/thumbcursor.git
 cd thumbcursor
 make install
 ```
-
-This builds `Thumbcursor.app`, copies it to `~/Applications` and registers a LaunchAgent so it starts at login.
 
 ### Grant Accessibility access
 
@@ -150,11 +162,21 @@ make restart
 
 ## Uninstalling
 
+From a clone of the repo:
+
 ```sh
 make uninstall
 ```
 
-This stops the agent and removes the app and LaunchAgent. You can then remove Thumbcursor from the Accessibility list.
+Or, if you installed from a release:
+
+```sh
+launchctl bootout gui/$(id -u)/com.thumbcursor.Thumbcursor
+rm -f ~/Library/LaunchAgents/com.thumbcursor.Thumbcursor.plist
+rm -rf ~/Applications/Thumbcursor.app
+```
+
+Either way, this stops the agent and removes the app and LaunchAgent. You can then remove Thumbcursor from the Accessibility list.
 
 ## Development
 
@@ -166,14 +188,18 @@ Tests/
   main.swift          Engine tests (plain Swift, no XCTest required)
 Resources/
   Info.plist          App bundle metadata
-  LaunchAgent.plist   Start-at-login template
   make-icon.swift     Draws the app icon with CoreGraphics
+scripts/
+  install.sh          Installs the app and LaunchAgent (used by make install and release zips)
+.github/workflows/
+  release.yml         Tests, builds and publishes a release on every push to main
 ```
 
 | Command | Description |
 | --- | --- |
 | `make build` | Build `build/Thumbcursor.app` |
 | `make test` | Run the engine tests |
+| `make dist VERSION=x.y.z` | Build the release zip `build/Thumbcursor-x.y.z.zip` |
 | `make install` | Build, install to `~/Applications` and start the LaunchAgent |
 | `make restart` | Restart the running agent |
 | `make log` | Follow `~/Library/Logs/Thumbcursor.log` |
@@ -185,6 +211,12 @@ The icon is generated at build time from `Resources/make-icon.swift`. To preview
 ```sh
 swift Resources/make-icon.swift icon.png && open icon.png
 ```
+
+### Releases
+
+Every push to `main` triggers the [Release workflow](.github/workflows/release.yml). It runs the tests, builds the app and publishes a GitHub release with auto-generated notes. Pushes that only change Markdown or `docs/` are skipped.
+
+Versions are `1.0.<run number>`, so they count up automatically. To bump the major or minor version, change `MAJOR_MINOR` in the workflow. You can also start a release by hand from the **Actions** tab (**Run workflow**).
 
 ## Credits
 

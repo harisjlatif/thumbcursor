@@ -5,10 +5,12 @@ APP        := $(BUILD)/$(APP_NAME).app
 INSTALL_DIR:= $(HOME)/Applications
 AGENT      := $(HOME)/Library/LaunchAgents/$(BUNDLE_ID).plist
 UID        := $(shell id -u)
+VERSION    ?= 0.0.0
+DIST       := $(BUILD)/$(APP_NAME)-$(VERSION)
 
 SWIFTC := xcrun swiftc -swift-version 5 -O
 
-.PHONY: build test install uninstall restart log clean
+.PHONY: build test dist install uninstall restart log clean
 
 build: $(APP)
 
@@ -27,6 +29,9 @@ $(ICNS): Resources/make-icon.swift
 $(APP): Sources/*.swift Resources/Info.plist $(ICNS)
 	mkdir -p $(APP)/Contents/MacOS $(APP)/Contents/Resources
 	cp Resources/Info.plist $(APP)/Contents/Info.plist
+	/usr/libexec/PlistBuddy \
+		-c "Set :CFBundleShortVersionString $(VERSION)" \
+		-c "Set :CFBundleVersion $(VERSION)" $(APP)/Contents/Info.plist
 	cp $(ICNS) $(APP)/Contents/Resources/AppIcon.icns
 	$(SWIFTC) Sources/*.swift -o $(APP)/Contents/MacOS/$(APP_NAME)
 	codesign --force --sign - --identifier $(BUNDLE_ID) $(APP)
@@ -36,16 +41,16 @@ test:
 	$(SWIFTC) Sources/Engine.swift Tests/main.swift -o $(BUILD)/tests
 	$(BUILD)/tests
 
+# Release zip: Thumbcursor-<version>/{Thumbcursor.app, install.sh}
+dist: build
+	rm -rf $(DIST) $(DIST).zip
+	mkdir -p $(DIST)
+	cp -R $(APP) $(DIST)/
+	cp scripts/install.sh $(DIST)/
+	cd $(BUILD) && ditto -c -k --norsrc --noextattr --noacl --keepParent $(APP_NAME)-$(VERSION) $(APP_NAME)-$(VERSION).zip
+
 install: build
-	-launchctl bootout gui/$(UID)/$(BUNDLE_ID) 2>/dev/null
-	mkdir -p $(INSTALL_DIR)
-	rm -rf $(INSTALL_DIR)/$(APP_NAME).app
-	cp -R $(APP) $(INSTALL_DIR)/
-	sed "s|__EXECUTABLE__|$(INSTALL_DIR)/$(APP_NAME).app/Contents/MacOS/$(APP_NAME)|; s|__LOG__|$(HOME)/Library/Logs/$(APP_NAME).log|" \
-		Resources/LaunchAgent.plist > $(AGENT)
-	launchctl bootstrap gui/$(UID) $(AGENT)
-	@echo "Installed. Grant Accessibility access to Thumbcursor when prompted"
-	@echo "(System Settings > Privacy & Security > Accessibility)."
+	scripts/install.sh $(APP)
 
 uninstall:
 	-launchctl bootout gui/$(UID)/$(BUNDLE_ID)
