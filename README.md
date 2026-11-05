@@ -168,7 +168,6 @@ Resources/
   Info.plist          App bundle metadata
   LaunchAgent.plist   Start-at-login template
   make-icon.swift     Draws the app icon with CoreGraphics
-TouchCursor.spoon/    Legacy Hammerspoon implementation
 ```
 
 | Command | Description |
@@ -187,14 +186,10 @@ The icon is generated at build time from `Resources/make-icon.swift`. To preview
 swift Resources/make-icon.swift icon.png && open icon.png
 ```
 
-### Legacy Hammerspoon version
-
-The original [Hammerspoon](https://www.hammerspoon.org) Spoon is still in [`TouchCursor.spoon/`](TouchCursor.spoon) if you'd rather use it. It doesn't handle typing rollover and is no longer maintained.
-
 ## Credits
 
 - [TouchCursor](https://martin-stone.github.io/touchcursor/) for Windows by Martin Stone, the original idea and behaviour.
-- The original Hammerspoon port by [Kevin Li](https://github.com/AlienKevin).
+- The earlier Hammerspoon-based macOS port by [Kevin Li](https://github.com/AlienKevin), which this project grew out of.
 
 ## License
 
