@@ -1,4 +1,4 @@
-// TouchCursor state machine.
+// Thumbcursor state machine.
 //
 // Pure logic with no CoreGraphics dependency so it can be unit tested.
 // Behaviour follows the original Windows TouchCursor:

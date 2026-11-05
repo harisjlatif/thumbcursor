@@ -1,5 +1,5 @@
-APP_NAME   := TouchCursor
-BUNDLE_ID  := com.touchcursor.TouchCursor
+APP_NAME   := Thumbcursor
+BUNDLE_ID  := com.thumbcursor.Thumbcursor
 BUILD      := build
 APP        := $(BUILD)/$(APP_NAME).app
 INSTALL_DIR:= $(HOME)/Applications
@@ -44,7 +44,7 @@ install: build
 	sed "s|__EXECUTABLE__|$(INSTALL_DIR)/$(APP_NAME).app/Contents/MacOS/$(APP_NAME)|; s|__LOG__|$(HOME)/Library/Logs/$(APP_NAME).log|" \
 		Resources/LaunchAgent.plist > $(AGENT)
 	launchctl bootstrap gui/$(UID) $(AGENT)
-	@echo "Installed. Grant Accessibility access to TouchCursor when prompted"
+	@echo "Installed. Grant Accessibility access to Thumbcursor when prompted"
 	@echo "(System Settings > Privacy & Security > Accessibility)."
 
 uninstall:

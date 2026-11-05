@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="docs/icon.png" width="160" alt="TouchCursor icon: a blueprint keyboard with I, J, K, L shown as arrow keys above a highlighted spacebar">
+  <img src="docs/icon.png" width="160" alt="Thumbcursor icon: a blueprint keyboard with I, J, K, L shown as arrow keys above a highlighted spacebar">
 </p>
 
-<h1 align="center">TouchCursor for macOS</h1>
+<h1 align="center">Thumbcursor</h1>
 
 <p align="center">
   Use the space bar as a modifier key to move the cursor and edit text without leaving the home row.
@@ -18,7 +18,7 @@
 
 Hold <kbd>Space</kbd> and the keys under your right hand become arrow keys, Home and End, Backspace, Delete and more. Tap <kbd>Space</kbd> on its own and you still get a space.
 
-A native macOS port of Martin Stone's [TouchCursor for Windows](https://martin-stone.github.io/touchcursor/). It's a small background app with no dependencies: no Hammerspoon or Karabiner needed.
+Inspired by Martin Stone's [TouchCursor for Windows](https://martin-stone.github.io/touchcursor/). Thumbcursor is a small native background app with no dependencies: no Hammerspoon or Karabiner needed.
 
 ## Contents
 
@@ -51,19 +51,19 @@ A native macOS port of Martin Stone's [TouchCursor for Windows](https://martin-s
 ### Build and install
 
 ```sh
-git clone https://github.com/harisjlatif/touchcursor-macos.git
-cd touchcursor-macos
+git clone https://github.com/harisjlatif/thumbcursor.git
+cd thumbcursor
 make install
 ```
 
-This builds `TouchCursor.app`, copies it to `~/Applications` and registers a LaunchAgent so it starts at login.
+This builds `Thumbcursor.app`, copies it to `~/Applications` and registers a LaunchAgent so it starts at login.
 
 ### Grant Accessibility access
 
-TouchCursor needs Accessibility access to read and remap keystrokes. On first launch macOS shows a prompt. You can also turn it on yourself:
+Thumbcursor needs Accessibility access to read and remap keystrokes. On first launch macOS shows a prompt. You can also turn it on yourself:
 
 1. Open **System Settings → Privacy & Security → Accessibility**.
-2. Turn on **TouchCursor**. If it isn't listed, click **+** and choose `~/Applications/TouchCursor.app`.
+2. Turn on **Thumbcursor**. If it isn't listed, click **+** and choose `~/Applications/Thumbcursor.app`.
 
 It starts working within a couple of seconds, with no restart needed.
 
@@ -100,7 +100,7 @@ Any modifier you hold is passed on with the output key, so the usual macOS text 
 
 ## How it works
 
-TouchCursor intercepts key events with a [`CGEventTap`](https://developer.apple.com/documentation/coregraphics/cgevent/tapcreate(tap:place:options:eventsofinterest:callback:userinfo:)) and passes them through a small state machine based on the Windows original:
+Thumbcursor intercepts key events with a [`CGEventTap`](https://developer.apple.com/documentation/coregraphics/cgevent/tapcreate(tap:place:options:eventsofinterest:callback:userinfo:)) and passes them through a small state machine based on the Windows original:
 
 | You do this | You get |
 | --- | --- |
@@ -120,7 +120,7 @@ Key mappings live in the `defaultMappings` table in [`Sources/Engine.swift`](Sou
 KeyCode.u: Mapping(KeyCode.left, arrowFlags | Flag.command),  // start of line
 ```
 
-After editing, run `make install` again. Because the app is rebuilt, you'll need to [grant Accessibility access again](#touchcursor-stopped-working-after-reinstalling).
+After editing, run `make install` again. Because the app is rebuilt, you'll need to [grant Accessibility access again](#thumbcursor-stopped-working-after-reinstalling).
 
 ## Troubleshooting
 
@@ -134,9 +134,9 @@ make log
 
 If it says `waiting for Accessibility permission`, follow the steps in [Grant Accessibility access](#grant-accessibility-access).
 
-#### TouchCursor stopped working after reinstalling
+#### Thumbcursor stopped working after reinstalling
 
-The app is ad-hoc signed, so each build has a new signature and macOS treats it as a different app. In **System Settings → Privacy & Security → Accessibility**, remove TouchCursor with **–** and add it again with **+**.
+The app is ad-hoc signed, so each build has a new signature and macOS treats it as a different app. In **System Settings → Privacy & Security → Accessibility**, remove Thumbcursor with **–** and add it again with **+**.
 
 #### It doesn't work in password fields
 
@@ -154,7 +154,7 @@ make restart
 make uninstall
 ```
 
-This stops the agent and removes the app and LaunchAgent. You can then remove TouchCursor from the Accessibility list.
+This stops the agent and removes the app and LaunchAgent. You can then remove Thumbcursor from the Accessibility list.
 
 ## Development
 
@@ -172,11 +172,11 @@ Resources/
 
 | Command | Description |
 | --- | --- |
-| `make build` | Build `build/TouchCursor.app` |
+| `make build` | Build `build/Thumbcursor.app` |
 | `make test` | Run the engine tests |
 | `make install` | Build, install to `~/Applications` and start the LaunchAgent |
 | `make restart` | Restart the running agent |
-| `make log` | Follow `~/Library/Logs/TouchCursor.log` |
+| `make log` | Follow `~/Library/Logs/Thumbcursor.log` |
 | `make uninstall` | Stop and remove everything |
 | `make clean` | Delete build output |
 

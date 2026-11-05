@@ -1,4 +1,4 @@
-// Renders the TouchCursor app icon (1024×1024 PNG) with CoreGraphics.
+// Renders the Thumbcursor app icon (1024×1024 PNG) with CoreGraphics.
 // Blueprint-style close-up of a keyboard: I/J/K/L shown as solid arrow keys,
 // with a solid spacebar (the modifier) below.
 //

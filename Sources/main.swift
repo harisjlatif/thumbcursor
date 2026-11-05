@@ -1,10 +1,10 @@
-// TouchCursor for macOS: connects the Engine state machine to a CGEventTap.
+// Thumbcursor: connects the Engine state machine to a CGEventTap.
 
 import ApplicationServices
 import Foundation
 
 /// Marks events we synthesize so our own tap ignores them.
-let marker: Int64 = 0x5443_5552  // "TCUR"
+let marker: Int64 = 0x5448_4D42  // "THMB"
 
 let engine = Engine()
 let source = CGEventSource(stateID: .privateState)
@@ -63,7 +63,7 @@ func installTap() -> Bool {
     let runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, port, 0)
     CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, .commonModes)
     CGEvent.tapEnable(tap: port, enable: true)
-    log("TouchCursor running")
+    log("Thumbcursor running")
     return true
 }
 

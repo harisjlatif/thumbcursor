@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Label</key>
-	<string>com.touchcursor.TouchCursor</string>
+	<string>com.thumbcursor.Thumbcursor</string>
 	<key>ProgramArguments</key>
 	<array>
 		<string>__EXECUTABLE__</string>
